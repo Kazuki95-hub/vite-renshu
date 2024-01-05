@@ -4,7 +4,9 @@ import {FormDialog} from './FormDialog';
 import {ActionButton} from './ActionButton';
 import {SideBar} from './SideBar';
 import { TodoItem} from './TodoItem';
- 
+import {ToolBar} from './ToolBar';
+
+
 // type Todo = {
 //   value: string;
 //   readonly id:number;
@@ -39,41 +41,41 @@ export const App = () => {
     setText('');
   };
 
-  const handleRemove = (id: number, removed: boolean) => {
-    setTodos((todos) => {
-      const newTodos = todos.map((todo) => {
-        if(todo.id === id) {
-          return {...todo, removed};
-        }
-        return todo;
-      });
+  // const handleRemove = (id: number, removed: boolean) => {
+  //   setTodos((todos) => {
+  //     const newTodos = todos.map((todo) => {
+  //       if(todo.id === id) {
+  //         return {...todo, removed};
+  //       }
+  //       return todo;
+  //     });
 
-      return newTodos;
-    })
-  };
+  //     return newTodos;
+  //   })
+  // };
 
   const handleSort = (filter: Filter) => {
     setFilter(filter);
   };
 
-  const filteredTodos = todos.filter((todo) => {
-    switch (filter) {
-      case 'all': 
-       return !todo.removed;
-      //削除されていないもの
-      case 'checked' :
-       return todo.checked && !todo.removed;
-      //完了済み　かつ　削除されていないもの
-      case 'unchecked':
-       return !todo.checked && !todo.removed;
-      // 未完了　かつ　削除されていないもの
-      case 'removed':
-       return todo.removed;
-      //削除済みのもの
-      default:
-       return todo;
-    }
-  })
+  // const filteredTodos = todos.filter((todo) => {
+  //   switch (filter) {
+  //     case 'all': 
+  //      return !todo.removed;
+  //     //削除されていないもの
+  //     case 'checked' :
+  //      return todo.checked && !todo.removed;
+  //     //完了済み　かつ　削除されていないもの
+  //     case 'unchecked':
+  //      return !todo.checked && !todo.removed;
+  //     // 未完了　かつ　削除されていないもの
+  //     case 'removed':
+  //      return todo.removed;
+  //     //削除済みのもの
+  //     default:
+  //      return todo;
+  //   }
+  // })
 
   const handleEmpty = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed));
@@ -101,6 +103,7 @@ export const App = () => {
   // <K: '書き換えたいプロパティ', V: '新しい値'>
   return (
     <div>
+     <ToolBar />
      <SideBar onSort = {handleSort} />
      <FormDialog text = {text} onChange = {handleChange} onSubmit= {handleSubmit} />
      <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
