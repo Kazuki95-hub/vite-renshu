@@ -3,8 +3,9 @@ import { useState } from 'react';
 import {FormDialog} from './FormDialog';
 import {ActionButton} from './ActionButton';
 import {SideBar} from './SideBar';
-import { TodoItem} from './TodoItem';
+import {TodoItem} from './TodoItem';
 import {ToolBar} from './ToolBar';
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 
 // type Todo = {
@@ -97,13 +98,14 @@ export const App = () => {
       return newTodos;
     })
 
-  }
+  };
   //Todoオブジェクトのプロパティをkeyof演算子で取得している
   //V extends Todo[K]で　V型の新しい値を代入
   // <K: '書き換えたいプロパティ', V: '新しい値'>
   return (
     <div>
-     <ToolBar />
+     <ToolBar filter= {filter} />
+     <GlobalStyles styles = {{ body: { margin:0, padding: 0}}} />
      <SideBar onSort = {handleSort} />
      <FormDialog text = {text} onChange = {handleChange} onSubmit= {handleSubmit} />
      <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />

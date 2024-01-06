@@ -21,7 +21,7 @@ export const FormDialog = (props:Props) => {
                //JSX分の中でJS変数の値を展開するには、{}で囲む必要がある。
                //""とかで囲むと通常の文字列として評価されてしまうため。
                //onChange イベント(=入力テキストの変化)をtextステートとして表示
-               onChange = {props.onChange} />
+               onChange = {(e) => props.onChange(e)} />
         <input 
          type="submit"
          value="追加"
