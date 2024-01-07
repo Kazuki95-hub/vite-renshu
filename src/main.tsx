@@ -3,7 +3,15 @@ import { createRoot } from "react-dom/client";
 //他のファイルからインポートしてる。
 
 import { App } from "./App";
+import { registerSW } from 'virtual:pwa-register';
 
+
+createRoot(document.getElementById('root') as Element).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+registerSW();
 
 const root = createRoot(document.getElementById("root") as Element);
 //createrootでルートを作成してブラウザDOMノード内にReactコンポーネントを表示できる。
