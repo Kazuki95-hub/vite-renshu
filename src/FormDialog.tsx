@@ -3,8 +3,10 @@
 
 type Props = {
   text: string;
+  dialogOpen: boolean;
   onSubmit: () => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onToggleDialog: () => void;
 };
 
 export const FormDialog = (props: Props) => {

@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import localforage from 'localforage';
+// import { useState } from 'react';
 //reactからuseStateフックをインポート
 import { FormDialog } from './FormDialog';
 import { ActionButton } from './ActionButton';
@@ -9,6 +12,9 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { indigo, pink } from '@mui/material/colors';
 import { QR } from './QR';
+import { AlertDialog } from './AlertDialog';
+import { isTodos } from './lib/isTodo';
+
 
 // type Todo = {
 //   value: string;
@@ -28,7 +34,18 @@ export const App = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
+
+  const handleToggleAlert = () => {
+    setAlertOpen((alertOpen) => !alertOpen);
+  }
+
+  const handleToggleDialog = () => {
+    setDialogOpen((dialogOpen) => !dialogOpen);
+    setText('');
+  }
 
 
   const handleToggleDrawer = () => {
@@ -41,13 +58,14 @@ export const App = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
-
-
   };
 
 
   const handleSubmit = () => {
-    if (!text) return;
+    if (!text) {
+      setDialogOpen((dialogOpen) => !dialogOpen);
+      return;
+    }
 
     const newTodo: Todo = {
       value: text,
@@ -58,6 +76,7 @@ export const App = () => {
 
     setTodos((todos) => [newTodo, ...todos]);
     setText('');
+    setDialogOpen((dialogOpen) => !dialogOpen);
   };
 
   // const handleRemove = (id: number, removed: boolean) => {
@@ -77,6 +96,21 @@ export const App = () => {
     setFilter(filter);
   };
 
+  useEffect(() => {
+    localforage
+      .getItem('todo-20200101')
+      .then((values) => setTodos(values as Todo[]));
+  }, []);
+
+  useEffect(() => {
+    localforage.setItem('todo-20200101', todos);
+  }, [todos]);
+
+  useEffect(() => {
+    localforage
+      .getItem('Todo-20200101')
+      .then((values) => isTodos(values) && setTodos(values));
+  }, []);
   // const filteredTodos = todos.filter((todo) => {
   //   switch (filter) {
   //     case 'all': 
@@ -117,6 +151,17 @@ export const App = () => {
     })
 
   };
+
+  useEffect(() => {
+    localforage
+      .getItem('todo-20200101')
+      .then((values) => setTodos(values as Todo[]));
+  }, []);
+
+  useEffect(() => {
+    localforage.setItem('todo-20200101', todos);
+  }, [todos]);
+
   //Todoオブジェクトのプロパティをkeyof演算子で取得している
   //V extends Todo[K]で　V型の新しい値を代入
   // <K: '書き換えたいプロパティ', V: '新しい値'>
@@ -130,9 +175,25 @@ export const App = () => {
         onToggleDrawer={handleToggleDrawer}
         onSort={handleSort} />
       <QR open={qrOpen} onClose={handleToggleQR} />
-      <FormDialog text={text} onChange={handleChange} onSubmit={handleSubmit} />
+      <FormDialog
+        text={text}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+        dialogOpen={dialogOpen}
+        onToggleDialog={handleToggleDialog}
+      />
+      <AlertDialog
+        alertOpen={alertOpen}
+        onEmpty={handleEmpty}
+        onToggleAlert={handleToggleAlert}
+      />
       <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
-      <ActionButton todos={todos} onEmpty={handleEmpty} />
+      <ActionButton todos={todos}
+        filter={filter}
+        alertOpen={alertOpen}
+        dialogOpen={dialogOpen}
+        onToggleAlert={handleToggleAlert}
+        onToggleDialog={handleToggleDialog} />
     </ThemeProvider>
   )
 }
