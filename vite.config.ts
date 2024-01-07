@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [react(), VitePWA({
     manifest: {
       name: 'Todo App(PWA)',
@@ -14,6 +15,7 @@ export default defineConfig({
       orientation: "portrait",
       theme_color: "#3f51b2",
       background_color: "#efeff4",
+      id: '/vite-renshu/',
       icons: [
         {
           src: 'icon-192x192.png',
