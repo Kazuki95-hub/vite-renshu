@@ -8,7 +8,7 @@ import { ToolBar } from './ToolBar';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { indigo, pink } from '@mui/material/colors';
-
+import { QR } from './QR';
 
 // type Todo = {
 //   value: string;
@@ -27,15 +27,24 @@ export const App = () => {
   const [filter, setFilter] = useState<Filter>('all');
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
+
+
 
   const handleToggleDrawer = () => {
     setDrawerOpen((drawerOpen) => !drawerOpen);
   }
+
+  const handleToggleQR = () => {
+    setQrOpen((qrOpen) => !qrOpen);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
 
 
-  }
+  };
+
 
   const handleSubmit = () => {
     if (!text) return;
@@ -117,8 +126,10 @@ export const App = () => {
       <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }} />
       <SideBar
         drawerOpen={drawerOpen}
+        onToggleQR={handleToggleQR}
         onToggleDrawer={handleToggleDrawer}
         onSort={handleSort} />
+      <QR open={qrOpen} onClose={handleToggleQR} />
       <FormDialog text={text} onChange={handleChange} onSubmit={handleSubmit} />
       <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
       <ActionButton todos={todos} onEmpty={handleEmpty} />
@@ -152,6 +163,4 @@ const theme = createTheme({
 //モジュール...全体の中での部分的なプログラム
 //ライブラリ...よく利用する関数や機能をまとめたファイル
 //イベントリスナーに渡す関数のことをコールバック関数という
-
-
 
